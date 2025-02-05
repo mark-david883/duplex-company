@@ -1,0 +1,12 @@
+/your_project_directory
+    /uploads
+    /static
+        /css
+            style.css
+        /img
+            logo.png  (Place your company logo here)
+    /templates
+        index.html
+        projects.html
+        post_property.html
+    app.py

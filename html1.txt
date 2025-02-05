@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Projects</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="DUPLEX INVESTMENT COMPANY Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/projects">Projects</a></li>
+                <li><a href="/post_property">Post Your Property</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="projects">
+        <h1>Our Featured Projects</h1>
+        <div class="project-list">
+            {% for project in projects %}
+            <div class="project-item">
+                <h3>{{ project.title }}</h3>
+                <p>{{ project.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 DUPLEX INVESTMENT COMPANY. All rights reserved.</p>
+    </footer>
+</body>
+</html>

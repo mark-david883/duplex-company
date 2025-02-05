@@ -1,0 +1,50 @@
+from flask import Flask, render_template, request, redirect, url_for
+import os
+
+app = Flask(__name__)
+
+# Directory settings
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['ALLOWED_EXTENSIONS'] = {'jpg', 'jpeg', 'png', 'gif'}
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB limit
+
+# Make sure the uploads directory exists
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+# Check allowed file extensions
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/projects')
+def projects():
+    # In a real app, you'd retrieve these from a database
+    projects = [
+        {"title": "Luxury Apartments", "description": "High-end apartments with ocean views."},
+        {"title": "Downtown Commercial Property", "description": "Prime location for businesses."}
+    ]
+    return render_template('projects.html', projects=projects)
+
+@app.route('/post_property', methods=['GET', 'POST'])
+def post_property():
+    if request.method == 'POST':
+        property_title = request.form['title']
+        property_description = request.form['description']
+        property_image = request.files.get('image')
+        
+        if property_image and allowed_file(property_image.filename):
+            filename = os.path.join(app.config['UPLOAD_FOLDER'], property_image.filename)
+            property_image.save(filename)
+            return redirect(url_for('index'))  # Redirect to homepage after submission
+
+        return "File format not allowed. Only JPG, PNG, GIF files are supported."
+    
+    return render_template('post_property.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
